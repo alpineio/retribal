@@ -1,0 +1,18 @@
+.retribal-lcol {
+    float:left;
+    width: 50%
+}
+.retribal-rcol{
+    float:right;
+}
+
+.retribal-soclist > li{
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+}
+
+.retribal-soclist > li > a {
+    box-shadow: none;
+    color: initial;
+}
