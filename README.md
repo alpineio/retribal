@@ -11,9 +11,7 @@ The Retribal plugin is available in the WordPress directory, or you may download
 
 ### License
 
-The Free Retribal Music Festival WordPress plugin is licensed under the Open Source Apache 2.0 License.  
-
- Copyright 2016 retribal.com
+The Free Retribal Music Festival WordPress plugin is copyright 2016 to retribal.com and licensed under the Open Source Apache 2.0 License.  
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
