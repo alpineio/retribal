@@ -14,22 +14,22 @@ add_action('init', 'create_performer');
 add_action('init', 'create_performer_types', 0);
 add_action('wp_enqueue_scripts', 'include_styles');
 add_action('admin_init', 'my_admin');
-add_action('save_post', 'save_performer_meta', 10, 3);
+add_action('save_post', 'save_meta', 10, 3);
 add_filter( 'single_template', 'include_template_function');
 
 function get_fields() {
     return array(
-        'hometown'        => ['Performer Hometown', 'text', 80],
-        'pitch'           => ['Pitch', 'wysiwyg'],
-        'contact_name'    => ['Contact Name','text', 80],
-        'contact_email'   => ['Contact Email','email', 80],
+        'hometown'                 => ['Performer Hometown', 'text', 80],
+        'pitch'                    => ['Pitch', 'wysiwyg'],
+        'contact_name'             => ['Contact Name','text', 80],
+        'contact_email'            => ['Contact Email','email', 80],
         'official_instagram'       => ['Official Instagram','url', 80],
         'official_youtube'         => ['Official Youtube','url', 80],
         'official_twitter'         => ['Official Twitter', 'url', 80],
         'official_website'         => ['Official Website','url', 80],
         'official_facebook'        => ['Official Facebook', 'url', 80],
         'official_vine'            => ['Official Vine', 'url', 80],
-        'embed_code'      => ['Embedded Html', 'html']
+        'embed_code'               => ['Embedded Html', 'html']
     );
 }
 
@@ -60,7 +60,7 @@ function include_template_function( $single_template ){
 }
 
 function create_performer() {
-    register_post_type( 'performers',
+    register_post_type( 'retribal-performers',
         array(
             'labels' => array(
                 'name'              => 'Performers',
@@ -86,24 +86,25 @@ function create_performer() {
                                         'thumbnail',
                                         ),
             'menu_icon'             => 'dashicons-microphone',
-            'has_archive'           => true
+            'has_archive'           => true,
+            'taxonomies'            => array('retribal-genre')
         )
         );
 }
 
 function create_performer_types() {
     $labels = array(
-        'name'              => _x( 'Genres', 'taxonomy general name', 'textdomain' ),
-        'singular_name'     => _x( 'Genre', 'taxonomy singular name', 'textdomain' ),
-        'search_items'      => __( 'Search Genres', 'textdomain' ),
-        'all_items'         => __( 'All Genres', 'textdomain' ),
-        'parent_item'       => __( 'Parent Genre', 'textdomain' ),
-        'parent_item_colon' => __( 'Parent Genre:', 'textdomain' ),
-        'edit_item'         => __( 'Edit Genre', 'textdomain' ),
-        'update_item'       => __( 'Update Genre', 'textdomain' ),
-        'add_new_item'      => __( 'Add New Genre', 'textdomain' ),
-        'new_item_name'     => __( 'New Genre Name', 'textdomain' ),
-        'menu_name'         => __( 'Genre', 'textdomain' ),
+        'name'              => 'Genres',
+        'singular_name'     => 'Genre',
+        'search_items'      => 'Search Genres',
+        'all_items'         => 'All Genres',
+        'parent_item'       => 'Parent Genre',
+        'parent_item_colon' => 'Parent Genre:',
+        'edit_item'         => 'Edit Genre',
+        'update_item'       => 'Update Genre',
+        'add_new_item'      => 'Add New Genre',
+        'new_item_name'     => 'New Genre',
+        'menu_name'         => 'Genres',
     );
 
     $args = array(
@@ -115,15 +116,13 @@ function create_performer_types() {
         'rewrite'           => array( 'slug' => 'genre' ),
     );
 
-    register_taxonomy( 'genre', array( 'book' ), $args );
+    register_taxonomy( 'retribal-genre', array( 'retribal-performer' ), $args );
 }
 
-function save_performer_meta( $performer_id, $performer, $update){
-    if ( $performer->post_type == 'performers') {
-        foreach (get_fields() as $name=>$args) {
-            if (isset($_POST[$name])) {
-                update_post_meta($performer_id, $name, $_POST[$name]);
-            }
+function save_meta( $performer_id, $performer, $update){
+    if ($_POST['retribal']) {
+        foreach ($_POST['retribal'] as $key=>$value) {
+            update_post_meta($performer_id, $key, $value);
         }
     }
 }
@@ -136,19 +135,19 @@ function display_performer_details_meta_box( $performer ){
         echo "<td style='width: 200px; padding: 20px 0px;'><strong>{$args[0]}</strong></td>";
         echo "<td>";
         if ($args[1] == 'wysiwyg') {
-            wp_editor($last_val, $name, array(
+            wp_editor($last_val, "retribal[{$name}]", array(
                 'media_buttons' => false,
                 'textarea_rows' => 8
             ));
         }elseif ($args[1] == 'html') {
-            wp_editor($last_val, $name, array(
+            wp_editor($last_val, "retribal[{$name}]", array(
                 'media_buttons' => false,
                 'textarea_rows' => 8,
                 'tabindex'      => 'text',
                 'tinymce'       => false
             ));
         } else {
-            echo "<input type='{$args[1]}' size='80' name='{$name}' value='{$last_val}'/>";
+            echo "<input type='{$args[1]}' size='80' name='retribal[{$name}]' value='{$last_val}'/>";
         }
         echo "</td></tr>";
     }
