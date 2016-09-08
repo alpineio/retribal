@@ -7,6 +7,7 @@ Version: 1.0
 Author: AlpineIO
 Author URI: https://retribal.com/
 License: Apache License, Version 2.0
+License URI: http://www.apache.org/licenses/LICENSE-2.0
 */
 
 add_action('init', 'create_performer');
