@@ -1,8 +1,5 @@
 <?php
-get_header()
-
-
-
+get_header();
 ?>
 
 <?php ?>
@@ -105,6 +102,8 @@ get_header()
 									if ( !empty( $iconlist ) ) {
 										printf( '<ul class="retribal-soclist">%s</ul>', $iconlist );
 									}
+
+									the_terms($post->ID, 'retribal-genre', 'Genres: ');
 
 									$embed = get_post_meta( $post->ID, 'embed_code', true );
 									if ( !empty( $embed) ) {
