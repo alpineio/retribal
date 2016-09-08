@@ -1,13 +1,12 @@
 <?php
-
 /*
-Plugin Name: Retribal
-Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
-Description: A brief description of the Plugin.
+Plugin Name: Retribal Music Festival Plugin
+Plugin URI: https://retribal.com/free-music-festival-wordpress-plugin/
+Description: The Free Retribal Music Festival plugin works with any theme and is full of features to engage your fans, sponsors, artists, staff, volunteers, venues and stages.
 Version: 1.0
 Author: AlpineIO
-Author URI: http://URI_Of_The_Plugin_Author
-License: A "Slug" license name e.g. GPL2
+Author URI: https://retribal.com/
+License: Apache License, Version 2.0
 */
 
 add_action('init', 'create_performer');
