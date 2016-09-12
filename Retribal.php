@@ -10,13 +10,13 @@ Author URI: http://URI_Of_The_Plugin_Author
 License: A "Slug" license name e.g. GPL2
 */
 
-add_action('init', 'retribal_register_post_types');
-add_action('wp_enqueue_scripts', 'include_styles');
-add_action('admin_init', 'my_admin');
-add_action('save_post', 'save_meta', 10, 3);
-add_filter( 'single_template', 'include_template_function');
+add_action('init', 'rtrbl_register_post_types');
+add_action('wp_enqueue_scripts', 'rtrbl_include_styles');
+add_action('admin_init', 'rtrbl_admin');
+add_action('save_post', 'rtrbl_save_meta', 10, 3);
+add_filter( 'single_template', 'rtrbl_include_template');
 
-function get_performer_fields() {
+function rtrbl_get_performer_fields() {
     return array(
         'hometown'                 => ['Performer Hometown', 'text', 80],
         'pitch'                    => ['Pitch', 'wysiwyg'],
@@ -31,7 +31,16 @@ function get_performer_fields() {
         'embed_code'               => ['Embedded Html', 'html']
     );
 }
-function get_venue_fields() {
+
+/*function rtrbl_get_performance_fields() {
+    return array(
+        'start_time'                => ['Start Time', 'date'],
+        'duration'                  => ['Duration', 'number'],
+        'related_venue'             => ['Venue', 'post-type-radio', 'retribal-venues'],
+        'related_performers'        => ['Performers', 'post-type-multiselect', 'retribal-performers']
+    );
+}*/
+function rtrbl_get_venue_fields() {
     return array(
         'short_name'                => ['Short Name', 'text', 80],
         'short_desc'                => ['Short Description', 'wysiwyg'],
@@ -44,7 +53,7 @@ function get_venue_fields() {
     );
 }
 
-function my_admin() {
+function rtrbl_admin() {
     add_meta_box(
         'performer_details_meta_box',
         'Details',
@@ -57,17 +66,23 @@ function my_admin() {
         'display_venue_details_meta_box',
         'retribal-venue', 'normal', 'high'
         );
+/*    add_meta_box(
+        'performance_details_meta_box',
+        'Details',
+        'display_performance_details_meta_box',
+        'retribal-performance', 'normal', 'high'
+    );*/
 }
 
-function include_styles(){
+function rtrbl_include_styles(){
     if(!is_admin()){
         $handle = 'retribal-stylesheet';
         wp_enqueue_style($handle, plugins_url( $handle . '.css', __FILE__ ));
-        wp_enqueue_script('2169bbd34c', "https://use.fontawesome.com/2169bbd34c.js");
+        wp_enqueue_script('font-awesome.min', "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css");
     }
 }
 
-function include_template_function( $single_template ){
+function rtrbl_include_template($single_template ){
     global $post;
 
     if ($post->post_type == 'retribal-performer') {
@@ -80,14 +95,15 @@ function include_template_function( $single_template ){
     return $single_template;
 }
 
-function retribal_register_post_types(){
-    create_performer();
-    create_performer_types();
-    create_venue();
-    create_venue_features();
+function rtrbl_register_post_types(){
+    rtrbl_create_performer();
+    rtrbl_create_performer_types();
+    rtrbl_create_venue();
+    rtrbl_create_venue_features();
+//    rtrbl_create_performance();
 }
 
-function create_venue(){
+function rtrbl_create_venue(){
     register_post_type( 'retribal-venue',
         array(
             'labels' => array(
@@ -122,7 +138,7 @@ function create_venue(){
     );
 }
 
-function create_venue_features() {
+function rtrbl_create_venue_features() {
     $labels = array(
         'name'              => 'Venue Features',
         'singular_name'     => 'Venue Feature',
@@ -149,7 +165,7 @@ function create_venue_features() {
     register_taxonomy( 'retribal-venue-feature', array( 'retribal-venue' ), $args );
 }
 
-function create_performer() {
+function rtrbl_create_performer() {
     register_post_type( 'retribal-performer',
         array(
             'labels' => array(
@@ -183,7 +199,40 @@ function create_performer() {
         );
 }
 
-function create_performer_types() {
+/*function rtrbl_create_performance() {
+    register_post_type('retribal-performance',
+        array(
+            'labels' => array(
+                'name'              => 'Performances',
+                'singular_name'     => 'Performance',
+                'add_new'           => 'Add New',
+                'add_new_item'      => 'Add New Performance',
+                'edit'              => 'Edit',
+                'edit_item'         => 'Edit Performance',
+                'new_item'          => 'New Performance',
+                'view'              => 'View',
+                'view_item'         => 'View Performance',
+                'search_items'      => 'Search Performances',
+                'not_found'         => 'No Performances Found',
+                'not_found_in_trash'=> 'No Performances found in Trash',
+                'parent'            => 'Parent Performance'
+            ),
+            'public'                => true,
+            'menu_position'         => 15,
+            'supports'              => array(
+                'title',
+                'editor',
+                'comments',
+                'thumbnail',
+            ),
+            'menu_icon'             => 'dashicons-excerpt-view',
+            'has_archive'           => true,
+            'rewrite'               => ['slug' => 'performance']
+        )
+    );
+}*/
+
+function rtrbl_create_performer_types() {
     $labels = array(
         'name'              => 'Genres',
         'singular_name'     => 'Genre',
@@ -210,7 +259,7 @@ function create_performer_types() {
     register_taxonomy( 'retribal-genre', array( 'retribal-performer' ), $args );
 }
 
-function save_meta( $performer_id, $performer, $update){
+function rtrbl_save_meta($performer_id, $performer, $update){
     if ($_POST['retribal']) {
         foreach ($_POST['retribal'] as $key=>$value) {
             update_post_meta($performer_id, $key, $value);
@@ -218,15 +267,19 @@ function save_meta( $performer_id, $performer, $update){
     }
 }
 
-function display_performer_details_meta_box($post){
-    retribal_display_meta_box($post, 'get_performer_fields');
+function rtrbl_display_performer_details_meta_box($post){
+    rtrbl_display_meta_box($post, 'get_performer_fields');
 }
 
-function display_venue_details_meta_box($post) {
-    retribal_display_meta_box($post, 'get_venue_fields');
+function rtrbl_display_venue_details_meta_box($post) {
+    rtrbl_display_meta_box($post, 'get_venue_fields');
 }
 
-function retribal_display_meta_box($post , $fields){
+/*function rtrbl_display_performance_details_meta_box($post) {
+    rtrbl_display_meta_box($post, 'get_performance_fields');
+}*/
+
+function rtrbl_display_meta_box($post , $fields){
     echo '<table style="margin-left: 10px; ">';
     foreach ($fields() as $name => $args) {
         $last_val = get_post_meta($post->ID, $name, true);
@@ -244,6 +297,14 @@ function retribal_display_meta_box($post , $fields){
                 'media_buttons' => false,
                 'textarea_rows' => 8,
             ));
+        }elseif ($args[1] == 'post-type-radio') {
+            $posts_array = get_posts(array(
+                'orderby'   => 'title',
+                'post_type' => $args[2],
+            ));
+            foreach( $posts_array as $item ) {
+                echo "<input type='radio' name='retribal[{$name}]' value='{$item->ID}'/>";
+            };
         } else {
             echo "<input type='{$args[1]}' size='80' name='retribal[{$name}]' value='{$last_val}'/>";
         }
