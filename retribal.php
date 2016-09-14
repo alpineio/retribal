@@ -10,6 +10,21 @@ License: Apache License, Version 2.0
 License URI: http://www.apache.org/licenses/LICENSE-2.0
 */
 
+if (version_compare(PHP_VERSION, '5.4', '<')) {
+    add_action('admin_notices', create_function('', "
+        echo '<div class=\"error\"><p>" . __('Plugin Name requires PHP 5.4 to function properly. Please upgrade PHP. The Plugin has been auto-deactivated.', 'plugin-name') . "</p></div>'; 
+        if (isset($_GET[activate])){
+            unset($_GET[activate])
+            };
+        "));
+
+    add_action('admin_init', 'pluginname_deactivate_self');
+    function pluginname_deactivate_self()
+    {
+        deactivate_plugins(plugin_basename(__FILE__));
+    }
+    return;
+} else {
 add_action('init', 'rtrbl_register_post_types');
 add_action('wp_enqueue_scripts', 'rtrbl_include_styles');
 add_action('admin_init', 'rtrbl_admin');
@@ -312,5 +327,5 @@ function rtrbl_display_meta_box($post , $fields){
     }
     echo '</table>';
 }
-
+}
 ?>
