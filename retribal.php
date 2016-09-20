@@ -15,7 +15,8 @@ License URI: http://www.apache.org/licenses/LICENSE-2.0
 if (version_compare(PHP_VERSION, '5.4', '<')) {
 
     add_action('admin_notices', create_function('', "
-        echo '<div class=\"error\"><p>" . __('Plugin Name requires PHP 5.4 to function properly. Please upgrade PHP. The Plugin has been auto-deactivated.', 'plugin-name') . "</p></div>'; 
+        echo '<div class=\"error\"><p>" . __('Plugin Name requires PHP 5.4 to function properly. ') 
+        			. _( 'Please upgrade PHP. The Plugin has been auto-deactivated.', 'plugin-name') . "</p></div>'; 
         if (isset($_GET[activate])){
             unset($_GET[activate])
             };
