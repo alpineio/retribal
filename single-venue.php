@@ -21,12 +21,12 @@ get_header();
 									<?php
 									if ( has_post_thumbnail()) {
 										$large_image_url = wp_get_attachment_image_url( get_post_thumbnail_id($post->ID), 'medium');
-										printf("<img src='%s'>", $large_image_url);
+										printf("<img class='rt-venue-img' src='%s'>", $large_image_url);
 									}
-									print "<h5>Venue Info</h5>";
+									print "<h5 class='rt-venue-title'>Venue Info</h5>";
 									$capacity = get_post_meta( $post->ID, 'capacity', true );
 									if ( !empty( $capacity ) ) {
-										printf( "<p><b>Capacity:</b> %s</p>", $capacity );
+										printf( "<p class='rt-venue-capacity'><b>Capacity:</b> %s</p>", $capacity );
 									}
 									$official_website = get_post_meta( $post->ID, 'official_website', true );
 									if ( !empty( $official_website ) ) {
@@ -34,8 +34,10 @@ get_header();
 										$parse = parseUrl($official_website);
 										$prettyurl = $parse['domain'];
 
-										printf( "<p><b>Website:</b> <a href='%s' target='_blank'>%s</a></p>", $official_website,
-											$prettyurl );
+										printf( "<p class='rt-venue-website'><b>Website:</b> <a href='%s' target='_blank'>%s</a></p>",
+											 $official_website,
+											 $prettyurl 
+											);
 									}
 
 									// Icons
@@ -91,8 +93,8 @@ get_header();
 
 					<!-- categories and tags -->
 					<div class="entry-footer clearfix">
-						<?php wp_link_pages( array( 'before' => '<p class="entry-utility"><strong>' . __( 'Pages:', 'it-l10n-Builder-Essence-White' ) . '</strong> ', 'after' => '</p>', 'next_or_number' => 'number' ) ); ?>
-						<?php edit_post_link( __( 'Edit this entry.', 'it-l10n-Builder-Essence-White' ), '<p class="entry-utility edit-entry-link">', '</p>' ); ?>
+						<?php wp_link_pages( array( 'before' => '<p class="entry-utility"><strong>' . __( 'Pages:' ) . '</strong> ', 'after' => '</p>', 'next_or_number' => 'number' ) ); ?>
+						<?php edit_post_link( __( 'Edit this entry.' ), '<p class="entry-utility edit-entry-link">', '</p>' ); ?>
 					</div>
 				</div>
 				<!-- end .post -->

@@ -13,7 +13,13 @@ your fans, artists, staff, venues and stages.
 
 == Frequently Asked Questions == 
 
-None yet
+= Syntax Error on Installation =
+
+The retribal plugin uses the short array syntax.  This was only added in PHP 5.4.  So, this plugin requires PHP 5.4.
+
+= How Can I Style Performers and Venues? =
+
+Add "rt-performer-" and "rt-venues-" classes to your theme styles.
 
 == Installation ==
 
@@ -24,7 +30,8 @@ Upload the retribal folder to the /wp-content/plugins/ directory
 Activate the Retribal plugin through the 'Plugins' menu in WordPress
 Configure the plugin by going to the Retribal menu that appears in your admin menu
 Start adding Performers, Genres, Venues, and Venue Features!
-License
+
+== License ==
 
 The Free Retribal Music Festival WordPress plugin is copyright 2016 to retribal.com and licensed under the 
 Open Source Apache 2.0 License.
@@ -91,6 +98,8 @@ in-seat mech sales, extensive sponsor support, maps, stage schedules, and walkin
 about it at https://retribal.com/, contribute or request support at https://github.com/alpineio/retribal
 
 == Changelog ==
+
+ 1.01 - Added PHP version check.  Modified readme.txt.
 
  1.0 - Initial Release
 
